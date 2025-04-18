@@ -10,3 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Setup environment variables
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "IS_STAGING=false" >> $GITHUB_ENV
+          else
+            echo "IS_STAGING=true" >> $GITHUB_ENV
+          fi
+          
