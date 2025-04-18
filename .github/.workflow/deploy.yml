@@ -1,0 +1,12 @@
+name: Deployment
+
+on: 
+  push:
+    branches: [main, staging]
+  
+jobs:
+  deploy:
+    name: Deploying...
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
