@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Test
+        run: npm run test
       
       - name: Setup environment variables
         run: |
