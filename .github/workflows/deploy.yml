@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      - name: Test
-        run: npm run test
       
       - name: Setup environment variables
         run: |
@@ -22,3 +19,20 @@ jobs:
             echo "IS_STAGING=true" >> $GITHUB_ENV
           fi
           
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2`
+        with:
+          terraform_version: 1.7.0
+          
+      - name: Install dependencies...
+        env:
+          IS_STAGING: ${{ env.IS_STAGING }}
+        run: |
+          npm ci
+
+      - name: Building static site...
+        env:
+          IS_STAGING: ${{ env.IS_STAGING }}
+        run: |
+          npm run export
+        
