@@ -1,30 +1,12 @@
-import Image from "next/image";
-
-export default function HomePage() {
+export default function Home() {
   return (
-    <main className="min-h-screen p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4">Tolga Tosun</h1>
-        <h2 className="text-2xl text-gray-600 dark:text-gray-300 mb-4">Frontend Developer</h2>
-        <p className="text-lg mb-8">2016'dan beri web geliştirme alanında çalışmaktayım.</p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <section>
-            <h3 className="text-xl font-semibold mb-4">Hakkımda</h3>
-            <p className="text-gray-700 dark:text-gray-300">
-              Modern web teknolojileri ile kullanıcı dostu ve performanslı uygulamalar geliştiriyorum.
-              React, Next.js ve TypeScript konularında uzmanlaşmış durumdayım.
-            </p>
-          </section>
-          
-          <section>
-            <h3 className="text-xl font-semibold mb-4">İletişim</h3>
-            <p className="text-gray-700 dark:text-gray-300">
-              Projeleriniz için benimle iletişime geçebilirsiniz.
-            </p>
-          </section>
-        </div>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
+        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
+          Get started by editing&nbsp;
+          <code className="font-mono font-bold">src/app/page.tsx</code>
+        </p>
       </div>
     </main>
-  );
+  )
 }
