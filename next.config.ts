@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
     unoptimized: true
   },
   trailingSlash: true,
+  experimental: {
+    turbo: {
+      resolveAlias: {
+        // Cache yapılandırması
+        cache: true
+      }
+    }
+  },
   /* config options here */
 };
 
