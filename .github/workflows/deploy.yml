@@ -34,7 +34,7 @@ jobs:
         env:
           IS_STAGING: ${{ env.IS_STAGING }}
         run: |
-          npm run build
+          npm run export
         
       - name: Sync to S3
         env:
