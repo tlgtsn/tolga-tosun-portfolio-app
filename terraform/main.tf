@@ -33,8 +33,11 @@ resource "aws_s3_bucket_policy" "site" {
         Principal = {
           AWS = aws_cloudfront_origin_access_identity.oai.iam_arn
         }
-        Action   = "s3:GetObject"
-        Resource = "${aws_s3_bucket.site.arn}/*"
+        Action   = ["s3:GetObject", "s3:ListBucket"]
+        Resource = [
+          aws_s3_bucket.site.arn,
+          "${aws_s3_bucket.site.arn}/*"
+        ]
       }
     ]
   })
@@ -106,4 +109,13 @@ resource "aws_cloudfront_distribution" "site" {
   viewer_certificate {
     cloudfront_default_certificate = true
   }
+}
+
+# Outputs
+output "cloudfront_domain_name" {
+  value = aws_cloudfront_distribution.site.domain_name
+}
+
+output "cloudfront_distribution_id" {
+  value = aws_cloudfront_distribution.site.id
 } 
