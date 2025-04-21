@@ -81,23 +81,85 @@ resource "aws_cloudfront_distribution" "site" {
   is_ipv6_enabled     = true
   default_root_object = "index.html"
 
-  default_cache_behavior {
+  # Cache behavior for static files
+  ordered_cache_behavior {
+    path_pattern     = "/_next/static/*"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "S3-${aws_s3_bucket.site.id}"
 
     forwarded_values {
       query_string = false
+      headers      = ["Origin"]
 
       cookies {
         forward = "none"
       }
     }
 
-    viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
+    default_ttl            = 86400
+    max_ttl                = 31536000
+    compress               = true
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
+  # Cache behavior for images
+  ordered_cache_behavior {
+    path_pattern     = "/images/*"
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "S3-${aws_s3_bucket.site.id}"
+
+    forwarded_values {
+      query_string = false
+      headers      = ["Origin"]
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    min_ttl                = 0
+    default_ttl            = 86400
+    max_ttl                = 31536000
+    compress               = true
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
+  # Default cache behavior
+  default_cache_behavior {
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "S3-${aws_s3_bucket.site.id}"
+
+    forwarded_values {
+      query_string = true
+      headers      = ["Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method"]
+
+      cookies {
+        forward = "all"
+      }
+    }
+
+    min_ttl                = 0
+    default_ttl            = 0
+    max_ttl                = 0
+    compress               = true
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
+  # Custom error responses for Next.js
+  custom_error_response {
+    error_code         = 403
+    response_code      = 200
+    response_page_path = "/index.html"
+  }
+
+  custom_error_response {
+    error_code         = 404
+    response_code      = 200
+    response_page_path = "/index.html"
   }
 
   restrictions {
