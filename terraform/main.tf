@@ -28,11 +28,13 @@ resource "aws_s3_bucket_policy" "site" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid       = "PublicReadGetObject"
+        Sid       = "AllowCloudFrontOAI"
         Effect    = "Allow"
-        Principal = "*"
-        Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.site.arn}/*"
+        Principal = {
+          AWS = aws_cloudfront_origin_access_identity.oai.iam_arn
+        }
+        Action   = "s3:GetObject"
+        Resource = "${aws_s3_bucket.site.arn}/*"
       }
     ]
   })
@@ -64,14 +66,11 @@ resource "aws_s3_bucket_website_configuration" "site" {
 # CloudFront Distribution
 resource "aws_cloudfront_distribution" "site" {
   origin {
-    domain_name = aws_s3_bucket_website_configuration.site.website_endpoint
+    domain_name = aws_s3_bucket.site.bucket_regional_domain_name
     origin_id   = "S3-${aws_s3_bucket.site.id}"
 
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["TLSv1.2"]
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
     }
   }
 
